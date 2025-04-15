@@ -1,2 +1,2 @@
 # benchmarking_postgresql_overindexing
-This benchmark explores the real-world performance impact of overindexing in PostgreSQL. Using a controlled environment, identical datasets, and repeatable transactions, it highlights how excessive indexing can negatively affect throughput and write performance under realistic workloads.
+This repository contains a collection of scripts used to design, populate, and benchmark a custom PostgreSQL schema using pgbench. The goal is to simulate a realistic workload and assess the performance impact of overindexing in a controlled and repeatable environment.
