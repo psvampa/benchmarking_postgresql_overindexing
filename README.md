@@ -2,7 +2,9 @@
 This repository contains a collection of scripts for designing, populating, and benchmarking a custom PostgreSQL schema using pgbench.
 The goal is to simulate a pseudo-realistic workload (something different from what pgbench does by using thin tables full of integers) and assess the performance impact of overindexing in a controlled and repeatable environment.
 
-## Benchmark hardware specs
+## Benchmark environment specs
+
+### Hardware specs
 ```bash
 $ sudo dmidecode -s system-manufacturer
 Dell Inc.
@@ -62,3 +64,10 @@ Total memory: 1024 GB in 16 modules
 === Memory speeds ===
 16 -  Speed: 3200 MT/s
 $
+```
+### OS specs
+```bash
+$ hostnamectl | grep "Operating System"
+Operating System: Oracle Linux Server 9.4
+$
+```
