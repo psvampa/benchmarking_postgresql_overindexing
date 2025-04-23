@@ -9,8 +9,8 @@ Dell Inc.
 $
 $ sudo dmidecode -s system-product-name
 PowerEdge C6525
-[pablo.svampa@dell-8zklzb3-a7f577|prod pt]$
-[pablo.svampa@dell-8zklzb3-a7f577|prod pt]$ lscpu | awk '
+$
+$ lscpu | awk '
 /^Architecture:/ {show1=18; print; next}
 show1 > 0 {print; show1--; next}
 /^[Ll][123][a-z]* cache:/ {print}
