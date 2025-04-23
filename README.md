@@ -1,4 +1,4 @@
-# benchmarking_postgresql_overindexing
+# postgresql_benchmarking_overindexing
 This repository contains a collection of scripts for designing, populating, and benchmarking a custom PostgreSQL schema using pgbench.
 The goal is to simulate a pseudo-realistic workload (something different from what pgbench does by using thin tables full of integers) and assess the performance impact of overindexing in a controlled and repeatable environment.
 
