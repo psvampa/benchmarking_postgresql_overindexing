@@ -2,6 +2,9 @@
 This repository contains a collection of scripts for designing, populating, and benchmarking a custom PostgreSQL schema using pgbench.
 The goal is to simulate a pseudo-realistic workload (something different from what pgbench does by using thin tables full of integers) and assess the performance impact of overindexing in a controlled and repeatable environment.
 
+This benchmark does **NOT** intend to discourage the use of indexes that add value to the application. Instead, it aims to highlight the negative impact that indexes can have on INSERT, UPDATE, and DELETE operations, and how unused indexes in your database may negatively affect application performance without providing any benefit.
+You may be interested in using tools such as [pg_gather](https://github.com/jobinau/pg_gather) to quickly identify indexes that are not being used. These unused indexes should be considered as candidates for removal, unless they are serving a purpose such as enforcing uniqueness (e.g., primary keys or unique constraints).
+
 ## Benchmark environment specs
 
 ### Hardware specs
@@ -92,7 +95,7 @@ psql -d pgbench -f pgbench_schema_initial_data_load.sql
 Once the data schema has been loaded with the dataset, you may consider running a `pg_dump` to produce an exact copy of the data.
 This dump can be used to quickly and reliably recreate the database between test runs, ensuring that each execution is performed not only with the same data volume but with identical data contents.
 ```bash
-pg_dump -U postgres -d pgbench -F c -f pgbench_db_w_initial_load.dump
+pg_dump -U postgres -d pgbench -F c --clean -C -f dump_pgbench_metadata.dump
 ```
 
 ### 4. Performing pgbench
@@ -114,4 +117,23 @@ SELECT xact_commit,
        blk_write_time
 FROM   pg_stat_database
 WHERE  datname = 'pgbench'; 
+```
+### 5. Adding indexes for comparison
+Once the initial test round has been completed, you may be interested in running additional test rounds with more indexes.
+This repository includes the scripts [adding_7_indexes.sql](adding_7_indexes.sql), [adding_14_indexes.sql](adding_14_indexes.sql), [adding_21_indexes.sql](adding_21_indexes.sql), and [adding_32_indexes.sql](adding_32_indexes.sql).
+These indexes can be added on top of the original schema, which already includes seven initial indexes.
+The recommended steps to refresh the environment and run new tests are as follows:
+```bash
+# Recreate your database from previous dump
+pg_restore -U postgres -d postgres -j 4 --clean --if-exists dump_pgbench_metadata.dump
+# Use the adding_#_indexes.sql scripts to add additional indexes to the schema
+psql -f create_14_indexes.sql pgbench
+# Clean the bgwriter metrics
+psql -c "SELECT pg_stat_reset_shared('bgwriter')"
+# Remove any cache at OS and DB level (as OS superuser / root)
+systemctl stop postgresql-17
+echo 3 > /proc/sys/vm/drop_caches
+systemctl start postgresql-17
+# Run the benchmark one more time
+nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_load.sql -T 300 -c 16 -j 8 --no-vacuum &
 ```
