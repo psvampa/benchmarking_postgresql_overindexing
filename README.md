@@ -1,9 +1,13 @@
 # postgresql_benchmarking_overindexing
-This repository contains a collection of scripts for designing, populating, and benchmarking a custom PostgreSQL schema using pgbench.
-The goal is to simulate a pseudo-realistic workload (something different from what pgbench does by using thin tables full of integers) and assess the performance impact of overindexing in a controlled and repeatable environment.
+This repository contains a collection of scripts designed to create a data schema that is a bit more realistic than the default pgbench schema. It includes multiple tables with various data types, indexes, and check constraints. The repository also provides scripts for initial data population and a custom script that can be used through pgbench (taking advantage of its built-in concurrency capabilities).
 
-This benchmark does **NOT** intend to discourage the use of indexes that add value to the application. Instead, it aims to highlight the negative impact that indexes can have on INSERT, UPDATE, and DELETE operations, and how unused indexes in your database may negatively affect application performance without providing any benefit.
-You may be interested in using tools such as [pg_gather](https://github.com/jobinau/pg_gather) to quickly identify indexes that are not being used. These unused indexes should be considered as candidates for removal, unless they are serving a purpose such as enforcing uniqueness (e.g., primary keys or unique constraints).
+The goal is to simulate a pseudo-realistic workload; something different from the default pgbench workload, which relies on small tables populated with integer-only data, and to assess the performance impact of overindexing in a controlled and reproducible environment.
+
+This benchmark does **NOT** aim to evaluate PostgreSQL's transactional capabilities, nor is it intended to discourage the use of indexes that can provide performance benefits to the application. The advantages of indexing are well known and extensively documented.
+
+Instead, the purpose of this benchmark is to demonstrate the negative impact of overindexing or holding **UNUSED** indexes during data modification operations (INSERT, UPDATE, DELETE). These **UNUSED** indexes provide no benefits, and also introduce measurable performance degradation.
+
+You may be interested in tools like [pg_gather](https://github.com/jobinau/pg_gather) for quickly identifying unused indexes. These unused indexes can be considered candidates for removal, provided they are not required to enforce uniqueness (e.g., primary or unique constraints).
 
 ## Benchmark environment specs
 
@@ -138,3 +142,12 @@ systemctl start postgresql-17
 nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_load.sql -T 300 -c 16 -j 8 --no-vacuum &
 ```
 ## Results from my own test
+![TPS](benchmark_results/TPS.png)
+![TPS %](benchmark_results/TPS_pct.png)
+![Latency Average (ms)](benchmark_results/Latency_Average_ms.png)
+![Storage Usage (GB)](benchmark_results/Storage_Usage_GB.png)
+![Block Hits](benchmark_results/Block_Hits.png)
+![Block Reads](benchmark_results/Block_Reads.png)
+![Cache Efficiency Ratio (%)](benchmark_results/Cache_Efficiency_Ratio_pct.png)
+![Block Read Time (ms)](benchmark_results/Block_Read_Time_ms.png)
+![Block Write Time (ms)](benchmark_results/Block_Write_Time_ms.png)
