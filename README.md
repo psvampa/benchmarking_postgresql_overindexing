@@ -137,3 +137,4 @@ systemctl start postgresql-17
 # Run the benchmark one more time
 nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_load.sql -T 300 -c 16 -j 8 --no-vacuum &
 ```
+## Results from my own test
