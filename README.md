@@ -71,3 +71,13 @@ $ hostnamectl | grep "Operating System"
 Operating System: Oracle Linux Server 9.4
 $
 ```
+## How to Use
+
+### Install PostgreSQL
+Install the PostgreSQL version of your choice. You can follow the installation procedure detailed on https://www.postgresql.org/download/.
+My benchmark was performed using PostgreSQL version 17. Given the available hardware resources and the needs of the benchmark, PostgreSQL was configured according to the settings included in the [postgresql.auto.conf](postgresql.auto.conf) file.
+
+### Build your database schema
+```bash
+psql -d pgbench -f pgbench_custom_schema.sql
+```
