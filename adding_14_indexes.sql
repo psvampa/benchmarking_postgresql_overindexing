@@ -1,0 +1,14 @@
+CREATE INDEX idx_products_name ON products(name);
+CREATE INDEX idx_products_description ON products(description);
+CREATE INDEX idx_stock_product_id ON stock(product_id);
+CREATE INDEX idx_stock_warehouse_id ON stock(warehouse_id);
+CREATE INDEX idx_stock_quantity ON stock(quantity);
+CREATE INDEX idx_stock_min_quantity ON stock(min_quantity);
+CREATE INDEX idx_stock_movements_product_id ON stock_movements(product_id);
+CREATE INDEX idx_stock_movements_warehouse_id ON stock_movements(warehouse_id);
+CREATE INDEX idx_stock_movements_quantity ON stock_movements(quantity);
+CREATE INDEX idx_stock_movements_movement_type ON stock_movements(movement_type);
+CREATE INDEX idx_stock_movements_movement_date ON stock_movements(movement_date);
+CREATE INDEX idx_stock_movements_reason_code ON stock_movements(reason_code);
+CREATE INDEX idx_warehouses_name ON warehouses(name);
+CREATE INDEX idx_warehouses_location ON warehouses(location);
