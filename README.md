@@ -73,11 +73,45 @@ $
 ```
 ## How to Use
 
-### Install PostgreSQL
+### 1. Install PostgreSQL
 Install the PostgreSQL version of your choice. You can follow the installation procedure detailed on https://www.postgresql.org/download/.
-My benchmark was performed using PostgreSQL version 17. Given the available hardware resources and the needs of the benchmark, PostgreSQL was configured according to the settings included in the [postgresql.auto.conf](postgresql.auto.conf) file.
+My benchmark was performed using PostgreSQL version 17. Given the available hardware resources and the benchmark's needs, PostgreSQL was configured according to the settings included in the [postgresql.auto.conf](postgresql.auto.conf) file.
 
-### Build your database schema
+### 2. Build your database schema
+Build the database schema by using the [pgbench_custom_schema.sql](pgbench_custom_schema.sql) file.
 ```bash
 psql -d pgbench -f pgbench_custom_schema.sql
+```
+
+### 3. Populate your database schema
+Populate your database schema by using the [pgbench_schema_initial_data_load.sql](pgbench_schema_initial_data_load.sql) file.
+```bash
+psql -d pgbench -f pgbench_schema_initial_data_load.sql
+```
+#### Considerations
+Once the data schema has been loaded with the dataset, you may consider running a `pg_dump` to produce an exact copy of the data.
+This dump can be used to quickly and reliably recreate the database between test runs, ensuring that each execution is performed not only with the same data volume but with identical data contents.
+```bash
+pg_dump -U postgres -d pgbench -F c -f pgbench_db_w_initial_load.dump
+```
+
+### 4. Performing pgbench
+You can now run `pgbench` using the custom script [pgbench_tpc-b_custom_load.sql](pgbench_tpc-b_custom_load.sql).
+You may adjust the execution conditions and concurrency levels according to your needs by modifying the `pgbench` parameters.
+For more information, refer to the official `pgbench` documentation: https://www.postgresql.org/docs/17/pgbench.html
+```bash
+nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_load.sql -T 300 -c 16 -j 8 --no-vacuum &
+```
+#### Considerations
+It is recommended to run the benchmark using `nohup` to ensure that the execution and its statistics persist in case you lose connectivity with your terminal session.
+The `pgbench` execution data will be available in the `nohup.out` file once the execution completes.
+In addition to the `pgbench` statistics, you can obtain additional information about input/output load (to memory and underlying storage) using the following query:
+```sql
+SELECT xact_commit,
+       blks_read,
+       blks_hit,
+       blk_read_time,
+       blk_write_time
+FROM   pg_stat_database
+WHERE  datname = 'pgbench'; 
 ```
