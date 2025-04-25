@@ -148,5 +148,6 @@ nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_l
 ![Storage Usage (GB)](benchmark_results/Storage_Usage_GB.png)
 ![Block Hits](benchmark_results/Block_Hits.png)
 ![Block Reads](benchmark_results/Block_Reads.png)
+![Cache Efficiency Ratio (%)](benchmark_results/Cache_Efficiency_Ratio_pct_w_labels.png)
 ![Block Read Time (ms)](benchmark_results/Block_Read_Time_ms.png)
 ![Block Write Time (ms)](benchmark_results/Block_Write_Time_ms.png)
