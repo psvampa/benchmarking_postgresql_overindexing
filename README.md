@@ -1,11 +1,11 @@
 # postgresql_benchmarking_overindexing
 This repository contains a collection of scripts designed to create a data schema that is a bit more realistic than the default pgbench schema. It includes multiple tables with various data types, indexes, and check constraints. The repository also provides scripts for initial data population and a custom script that can be used through pgbench (taking advantage of its built-in concurrency capabilities).
 
-The goal is to simulate a pseudo-realistic workload; something different from the default pgbench workload, which relies on small tables populated with integer-only data, and to assess the performance impact of overindexing in a controlled and reproducible environment.
+The goal is to simulate a pseudo-realistic workload; something different from the default pgbench workload, which relies on small tables populated with integer-only data, and to assess the performance impact of over-indexing in a controlled and reproducible environment.
 
 This benchmark does **NOT** aim to evaluate PostgreSQL's transactional capabilities, nor is it intended to discourage the use of indexes that can provide performance benefits to the application. The advantages of indexing are well known and extensively documented.
 
-Instead, the purpose of this benchmark is to demonstrate the negative impact of overindexing or holding **UNUSED** indexes during data modification operations (INSERT, UPDATE, DELETE). These **UNUSED** indexes provide no benefits, and also introduce measurable performance degradation.
+Instead, the purpose of this benchmark is to demonstrate the negative impact of over-indexing or holding **UNUSED** indexes during data modification operations (INSERT, UPDATE, DELETE). These **UNUSED** indexes provide no benefits, and also introduce measurable performance degradation.
 
 You may be interested in tools like [pg_gather](https://github.com/jobinau/pg_gather) for quickly identifying unused indexes. These unused indexes can be considered candidates for removal, provided they are not required to enforce uniqueness (e.g., primary or unique constraints).
 
