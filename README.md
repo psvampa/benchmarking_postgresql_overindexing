@@ -142,6 +142,9 @@ systemctl start postgresql-17
 nohup /usr/pgsql-17/bin/pgbench -U postgres -d pgbench -f pgbench_tpc-b_custom_load.sql -T 300 -c 16 -j 8 --no-vacuum &
 ```
 ## Results from my own test
+![TPS](benchmark_results/TPS.png)
+![TPS %](benchmark_results/TPS_pct.png)
+![Latency Average (ms)](benchmark_results/Latency_Average_ms.png)
 ![Storage Usage (GB)](benchmark_results/Storage_Usage_GB.png)
 ![Block Hits](benchmark_results/Block_Hits.png)
 ![Block Reads](benchmark_results/Block_Reads.png)
